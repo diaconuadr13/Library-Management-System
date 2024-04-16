@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Landing Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Welcome to Our Library Management System</h1>
+
+        <div class="assignment-description">
+            <p class="text-center lead">Creaţi o aplicaţie care să conţină o bază de date creată în MySql şi o interfaţă pentru aceasta. La crearea interfeţei se va folosi tehnologia Python - Flask.</p>
+
+            <h4 class="text-center">Detalii Proiect</h4>
+            <ul>
+                <li>Profesor: Pupezescu Valentin</li>
+                <li>Tip: Individual</li>
+            </ul>
+
+            <h4 class="text-center">Structura Bazei de Date</h4>
+            <ul>
+                <li>Autori(AutorID, NumeAutor, PrenumeAutor, TaraOrigine)</li>
+                <li>Carti(CarteID, Denumire, AnAparitie, Editura)</li>
+                <li>Biblioteca(BibliotecaID, Denumire, Adresa)</li>
+            </ul>
+
+            <h4 class="text-center">Asocieri între Tabele</h4>
+            <ul>
+                <li>între tabela Autori şi tabela Carti – raport de cardinalitate M:N.</li>
+                <li>între tabela Carti şi tabela Biblioteca – raport de cardinalitate M:N.</li>
+            </ul>
+
+            <p class="text-center">Interfaţa va trebui sa permită utilizatorului să facă următoarele operaţii pe toate tabele: vizualizare, adăugare, modificare, ştergere. Vizualizarea tabelelor de legătură va presupune vizualizarea datelor referite din celelalte tabele.</p>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg mr-2">Login</a>
+            <a href="{{ url_for('register') }}" class="btn btn-secondary btn-lg">Sign Up</a>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

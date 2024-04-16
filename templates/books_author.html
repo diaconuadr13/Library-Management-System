@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book-Author Relationships</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container py-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-success">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <h1 class="text-center mb-4">List of Books and Authors</h1>
+        <div class="text-right mb-3">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#mymodal">Add New Book-Author
+                Relationship
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author Name</th>
+                    <th>Publisher</th>
+                    <th>Year</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for book_author in books_author %}
+                    <tr>
+                        <td>{{ book_author.Title }}</td>
+                        <td>{{ book_author.FirstName }} {{ book_author.LastName }}</td>
+                        <td>{{ book_author.Publisher }}</td>
+                        <td>{{ book_author.YearOfPublication }}</td>
+                        <td>
+                            <form method="POST"
+                                  action="{{ url_for('reserve_book', book_id=book_author.BookID, library_id=1) }}">
+                                <button type="submit" class="btn btn-primary">Reserve</button>
+                            </form>
+                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                    data-target="#modaledit{{ book_author.BookID }}_{{ book_author.AuthorID }}">Edit
+                            </button>
+                            <form method="POST"
+                                  action="{{ url_for('delete_book_author', book_id=book_author.BookID, author_id=book_author.AuthorID) }}"
+                                  style="display: inline;">
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure you want to delete?')">Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Add New Book-Author Relationship Modal -->
+        <div class="modal fade" id="mymodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add New Book-Author Relationship</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="{{ url_for('add_book_author') }}">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="book">Book</label>
+                                <select class="form-control" id="book" name="book">
+                                    {% for book in books %}
+                                        <option value="{{ book.BookID }}">{{ book.Title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="author">Author</label>
+                                <select class="form-control" id="author" name="author">
+                                    {% for author in authors %}
+                                        <option value="{{ author.AuthorID }}">{{ author.FirstName }} {{ author.LastName }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Book-Author Relationship Modal -->
+        {% for book_author in books_author %}
+            <div class="modal fade" id="modaledit{{ book_author.BookID }}_{{ book_author.AuthorID }}" tabindex="-1"
+                 role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Book-Author Relationship</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form method="POST"
+                              action="{{ url_for('update_book_author', old_book_id=book_author.BookID, old_author_id=book_author.AuthorID) }}">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="book">Book</label>
+                                    <select class="form-control" id="book" name="book">
+                                        {% for book in books %}
+                                            <option value="{{ book.BookID }}" {% if book.BookID == book_author.BookID %}
+                                                    selected {% endif %}>{{ book.Title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="author">Author</label>
+                                    <select class="form-control" id="author" name="author">
+                                        {% for author in authors %}
+                                            <option value="{{ author.AuthorID }}"
+                                                    {% if author.AuthorID == book_author.AuthorID %}
+                                                    selected {% endif %}>{{ author.FirstName }} {{ author.LastName }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+{% endblock %}
+</body>
+</html>

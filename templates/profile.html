@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container py-4">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-success">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+    <div class="container py-4">
+        <h1 class="text-center mb-4">Profile Page</h1>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <p><strong>Username:</strong> {{ current_user.username }}</p>
+                <p><strong>Email:</strong> {{ current_user.email }}</p>
+                <p><strong>Role:</strong> {{ current_user.role }}</p>
+                <p><strong>First Name:</strong> {{ current_user.firstName }}</p>
+                <p><strong>Last Name:</strong> {{ current_user.lastName }}</p>
+                <p><strong>Telephone:</strong> {{ current_user.telephone }}</p>
+                <p><strong>Address:</strong> {{ current_user.address }}</p>
+            </div>
+        </div>
+
+        <div class="text-center d-flex justify-content-between">
+            <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#updateModal">
+                Update Profile
+            </button>
+            <form method="POST" action="{{ url_for('delete_account') }}" style="display: inline;">
+                <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to delete your account? This action cannot be undone.')">
+                    Delete Account
+                </button>
+            </form>
+            <a href="{{ url_for('logout') }}" class="btn btn-secondary ml-2">Logout</a>
+        </div>
+    </div>
+
+    <!-- The Modal -->
+    <div class="modal" id="updateModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Profile</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="profileForm" method="POST" action="{{ url_for('update_profile') }}">
+                        {{ form.hidden_tag() }}
+                        <div class="form-group">
+                            {{ form.firstname.label }} {{ form.firstname(class="form-control" + (" is-invalid" if form.firstname.errors else ""), value=current_user.firstName) }}
+                            {% if form.firstname.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.firstname.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.lastname.label }} {{ form.lastname(class="form-control" + (" is-invalid" if form.lastname.errors else ""), value=current_user.lastName) }}
+                            {% if form.lastname.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.lastname.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.telephone.label }} {{ form.telephone(class="form-control" + (" is-invalid" if form.telephone.errors else ""), value=current_user.telephone) }}
+                            {% if form.telephone.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.telephone.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.address.label }} {{ form.address(class="form-control" + (" is-invalid" if form.address.errors else ""), value=current_user.address) }}
+                            {% if form.address.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.address.errors[0] }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        // Wait for the DOM to be fully loaded
+        document.addEventListener("DOMContentLoaded", function () {
+            // Check if there are any validation errors
+            const hasErrors = document.querySelector('.is-invalid');
+
+            // If there are errors, open the modal
+            if (hasErrors) {
+                $('#updateModal').modal('show');
+            }
+        });
+    </script>
+
+{% endblock %}
+</body>
+</html>

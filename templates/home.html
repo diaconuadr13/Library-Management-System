@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <!-- Add Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Library Management System</h1>
+
+        <nav class="nav flex-column bg-light rounded p-4 shadow">
+            <a class="nav-link active" href="{{ url_for('books') }}">Books</a>
+            <a class="nav-link" href="{{ url_for('authors') }}">Authors</a>
+            <a class="nav-link" href="{{ url_for('libraries') }}">Libraries</a>
+            <a class="nav-link" href="{{ url_for('books_author') }}">Books Author</a>
+            <a class="nav-link" href="{{ url_for('reservations') }}">Reservation</a>
+            <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+        </nav>
+    </div>
+    <!-- Add jQuery and Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

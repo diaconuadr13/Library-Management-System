@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reservations List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    {% extends 'base.html' %}
+    {% block content %}
+
+    <div class="container py-4">
+        <div class="container py-4">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert alert-success">
+                {{ messages[0] }}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <h1 class="text-center mb-4">List of Reservations</h1>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Book Title</th>
+                            <th>Library</th>
+                            <th>Publisher</th>
+                            <th>Reservation Date</th>
+                            <th>Due Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reservation in reservations %}
+                        <tr>
+                            <td>{{ reservation.Title }}</td>
+                            <td>{{ reservation.Name }}</td>
+                            <td>{{ reservation.Publisher }}</td>
+                            <td>{{ reservation.ReservationDate }}</td>
+                            <td>{{ reservation.DueDate }}</td>
+                            <td>
+                                <form method="POST"
+                                    action="{{ url_for('delete_reservation', reservation_id=reservation.ReservationID) }}"
+                                    onsubmit="return confirm('Are you sure you want to cancel this reservation?');">
+                                    <button type="submit" class="btn btn-danger">Cancel Reservation</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        {% endblock %}
+</body>
+
+</html>

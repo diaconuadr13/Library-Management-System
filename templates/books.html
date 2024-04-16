@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Book List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    {% extends 'base.html' %}
+    {% block content %}
+    <div class="container py-4">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-success">
+            {{ messages[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <h1 class="text-center mb-4">List of Books</h1>
+        <div class="text-right mb-3">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#mymodal">Add New Book
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Title</th>
+                        <th>Year of Publication</th>
+                        <th>Publisher</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                    <tr>
+                        <td>{{ book.Title }}</td>
+                        <td>{{ book.YearOfPublication }}</td>
+                        <td>{{ book.Publisher }}</td>
+                        <td>{{ book.Quantity }}</td>
+                        <td>
+                            <a href="" class="btn btn-warning btn-sm" data-toggle="modal"
+                                data-target="#modaledit{{ book.BookID }}">Edit</a>
+                            <form method="POST" action="{{ url_for('delete_book', id=book.BookID) }}"
+                                style="display: inline;">
+                                <input type="submit" value="Delete" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Are you sure you want to delete this book?');">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Add New Book Modal -->
+        <div class="modal fade" id="mymodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add New Book</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="{{ url_for('add_book') }}">
+                        <div class="modal-body">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                {{ form.title.label(class="form-label") }}
+                                {{ form.title(class="form-control", placeholder="Enter book") }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.year.label(class="form-label") }}
+                                {{ form.year(class="form-control", placeholder="Enter book year") }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.publisher.label(class="form-label") }}
+                                {{ form.publisher(class="form-control", placeholder="Enter book publisher") }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.quantity.label(class="form-label") }}
+                                {{ form.quantity(class="form-control", placeholder="Enter book quantity") }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Book Modal -->
+        {% for book in books %}
+        <div class="modal fade" id="modaledit{{ book.BookID }}" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Edit Book</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="{{ url_for('update_book', id=book.BookID) }}">
+                        <div class="modal-body">
+                            {{ form.hidden_tag() }}
+                            <div class="form-group">
+                                {{ form.title.label(class="form-label") }}
+                                {{ form.title(class="form-control", value=book.Title) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.year.label(class="form-label") }}
+                                {{ form.year(class="form-control", value=book.YearOfPublication) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.publisher.label(class="form-label") }}
+                                {{ form.publisher(class="form-control", value=book.Publisher) }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.quantity.label(class="form-label") }}
+                                {{ form.quantity(class="form-control", value=book.Quantity) }}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock %}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>
